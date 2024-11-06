@@ -7,9 +7,10 @@ const result = document.querySelector("#result");
 const wrapper = document.querySelector(".wrapper");
 const restart = document.querySelector("#restart");
 const Pause = document.querySelector("#Pause");
-const difficultySelect = document.getElementById("difficulty"); // New difficulty selector
+const difficultySelect = document.getElementById("difficulty"); // Difficulty selector
+const leaderboard = document.getElementById("leaderboard"); // Leaderboard container
 
-// Mapping Colors By Creating Colors Object
+// Mapping Colors
 const colors = {
   color1: {
     current: "#068e06",
@@ -33,10 +34,20 @@ let randomColors = [];
 let pathGeneratorBool = false;
 let count, clickCount = 0;
 let score = 0;
-let isPaused = false; // Track the paused state
-let pathSequence = []; // Track the sequence during pause
-let difficulty = "Player"; // Default difficulty
-let speedFactor = 1; // Time delay multiplier based on difficulty
+let isPaused = false; // Track paused state
+let difficulty = "medium"; // Default difficulty
+let speedFactor = 1; // Time delay multiplier
+
+
+// Initialize leaderboard with localStorage data
+function initializeLeaderboard() {
+  const easyScore = localStorage.getItem("easyScore") || 0;
+  const mediumScore = localStorage.getItem("mediumScore") || 0;
+  const hardScore = localStorage.getItem("hardScore") || 0;
+  document.getElementById("easy-score").innerText = easyScore;
+  document.getElementById("medium-score").innerText = mediumScore;
+  document.getElementById("hard-score").innerText = hardScore;
+}
 
 // Function to start the game
 startButton.addEventListener("click", () => {
@@ -47,12 +58,12 @@ startButton.addEventListener("click", () => {
   randomColors = [];
   pathGeneratorBool = false;
   isPaused = false; // Reset pause state
-  startButton.classList.add("hide")
   wrapper.classList.remove("hide");
   container.classList.add("hide");
   result.classList.remove("hide");
   restart.classList.remove("hide");
   Pause.classList.remove("hide");
+  leaderboard.classList.add("hide");
   pathGenerate();
 });
 
@@ -64,7 +75,7 @@ const pathGenerate = () => {
   pathDecide(count);
 };
 
-// Function to get a random value from the colors object
+// Function to get a random color
 const generateRandomValue = (obj) => {
   let arr = Object.keys(obj);
   return arr[Math.floor(Math.random() * arr.length)];
@@ -76,7 +87,6 @@ const pathDecide = async (count) => {
 
   for (let i of randomColors) {
     if (isPaused) {
-      // Wait until the game is resumed
       await new Promise((resolve) => {
         const interval = setInterval(() => {
           if (!isPaused) {
@@ -88,41 +98,37 @@ const pathDecide = async (count) => {
     }
 
     let currentColor = document.querySelector(`.${i}`);
-    await delay(500 / speedFactor); // Adjust speed based on difficulty
+    await delay(500 / speedFactor);
     currentColor.style.backgroundColor = `${colors[i]["new"]}`;
-    await delay(600 / speedFactor); // Adjust speed based on difficulty
+    await delay(600 / speedFactor);
     currentColor.style.backgroundColor = `${colors[i]["current"]}`;
-    await delay(600 / speedFactor); // Adjust speed based on difficulty
+    await delay(600 / speedFactor);
   }
   pathGeneratorBool = false;
 };
 
-// Delay for blink effect
+// Delay function for color effects
 async function delay(time) {
   return await new Promise((resolve) => {
     setTimeout(resolve, time);
   });
 }
 
-// When the user clicks on the colors
+// Handle user clicks on colors
 colorPart.forEach((element) => {
   element.addEventListener("click", async (e) => {
-    // If the path is still being generated, ignore clicks
     if (pathGeneratorBool || isPaused) {
       return false;
     }
-    
+
     if (e.target.classList[0] == randomColors[clickCount]) {
-      // Color blink effect on click
       e.target.style.backgroundColor = `${colors[randomColors[clickCount]]["new"]}`;
       await delay(500 / speedFactor);
 
       e.target.style.backgroundColor = `${colors[randomColors[clickCount]]["current"]}`;
 
-      // User click
       clickCount += 1;
 
-      // Next level if the number of valid clicks equals the count
       if (clickCount == count) {
         clickCount = 0;
         score += 10;
@@ -146,22 +152,20 @@ restart.addEventListener("click", () => {
   pathGenerate();
 });
 
-// Pause/Resume the game
+// Pause/Resume functionality
 Pause.addEventListener("click", () => {
   if (isPaused) {
-    // Resume the game
     isPaused = false;
     Pause.innerText = "Pause";
-    pathDecide(count); // Resume the path sequence
+    pathDecide(count); // Resume game
   } else {
-    // Pause the game
     isPaused = true;
-    pathGeneratorBool = false; // Stop the sequence generation
+    pathGeneratorBool = false; // Stop sequence generation
     Pause.innerText = "Resume";
   }
 });
 
-// Function when the player executes the wrong sequence
+// End the game and update the leaderboard
 const lose = () => {
   result.innerHTML = `<span> Your Score: </span> ${score}`;
   result.style.top = '0px';
@@ -172,20 +176,34 @@ const lose = () => {
   Pause.classList.add("hide");
   startButton.innerText = "Play Again";
   startButton.classList.remove("hide");
-};
+  leaderboard.classList.remove("hide");
 
-// Set difficulty parameters (speed and sequence length)
-const setDifficulty = () => {
-  switch (difficulty) {
-    case "Noob":
-      speedFactor = 0.5; // Slow down the sequence
-      break;
-    case "Player":
-      speedFactor = 1; // Normal speed
-      break;
-    case "Master":
-      speedFactor = 3; // Speed up the sequence
-      break;
+  // Update leaderboard for the current difficulty
+  const currentBestScore = localStorage.getItem(difficulty + "Score") || 0;
+  if (score > currentBestScore) {
+    localStorage.setItem(difficulty + "Score", score);
+    document.getElementById(difficulty + "-score").innerText = score;
   }
 };
 
+// Set difficulty
+const setDifficulty = () => {
+  switch (difficulty) {
+    case "easy":
+      speedFactor = 0.5;
+
+      break;
+    case "medium":
+      speedFactor = 1;
+   
+      break;
+    case "hard":
+      speedFactor = 3;
+   
+      break;
+  }
+  initializeLeaderboard(); // Display updated leaderboard
+};
+
+// Initialize leaderboard
+initializeLeaderboard();

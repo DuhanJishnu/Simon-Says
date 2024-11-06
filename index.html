@@ -13,19 +13,30 @@
   </head>
   <body>
     <div class="container">
-        <button id="restart" class="hide">Restart</button>
-        <button id="Pause" class="hide">Pause</button>
+      <button id="restart" class="hide">Restart</button>
+      <button id="Pause" class="hide">Pause</button>
       <p id="result" class="hide">Your Score : 0</p>
       <button id="start">Start Game</button>
       <select id="difficulty">
-        <option value="Noob">Noob</option>
-        <option value="Player" selected>Player</option>
-        <option value="Master">Master</option>
+        <option value="easy">Easy</option>
+        <option value="medium" selected>Medium</option>
+        <option value="hard">Hard</option>
       </select>
       
+      <!-- Input for player's name -->
+      <input type="text" id="playerName" placeholder="Enter your name" class="hide" />
+
+      <!-- Leaderboard Section -->
+      <div id="leaderboard" class="leaderboard">
+        <h3>Leaderboard</h3>
+        <p><strong>Easy:</strong> <span id="easy-score">0</span></p>
+        <p><strong>Medium:</strong> <span id="medium-score">0</span></p>
+        <p><strong>Hard:</strong> <span id="hard-score">0</span></p>
+      </div>
     </div>
+
     <div class="wrapper hide">
-      <div class="simon ">
+      <div class="simon">
         <div class="color1 color-part"></div>
         <div class="color2 color-part"></div>
         <div class="color3 color-part"></div>
@@ -33,6 +44,7 @@
         <div id="count">s00</div>
       </div>
     </div>
+
     <script src="script.js"></script>
   </body>
 </html>
