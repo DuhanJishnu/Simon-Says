@@ -7,10 +7,19 @@
   body {
     background-color: black;
   }
+  .name{
+    position: relative;
+    z-index: 2;
+    color: #000000;
+    text-align: center;
+    color: #ffffff;
+    padding-top: 10%;
+    font-size: 5em;
+  }
   .wrapper {
     background: radial-gradient(circle at bottom center, #FFC837 15px, #FF8008);
-    height: 37.5em;
-    width: 37.5em;
+    height: 38.5em;
+    width:  38.5em;
     position: absolute;
     transform: translate(-50%, -50%);
     top: 50%;
@@ -22,17 +31,12 @@
     width: 31.25em;
     background: radial-gradient(#3a3838, #000000);
     border-radius: 50%;
-    position: absolute;
+    position: relative;
     transform: translate(-50%, -50%);
-    top: 50%;
+    top: 47%;
     left: 50%;
   }
-  #result{
-    z-index: 3;
-    position: relative;
-    left: 559px;
-    top: -179px;
-  }
+  
   .color-part {
     height: 13.12em;
     width: 13.12em;
@@ -67,7 +71,7 @@
     position: absolute;
     content: "";
     background-color: #101010;
-    box-shadow: inset 0 0 0 0.5em #212121;
+    box-shadow: 0 0 0 0.4em #212121;
     height: 13.75em;
     width: 13.75em;
     z-index: 1;
@@ -117,16 +121,45 @@
   .container button:hover{
     box-shadow: 3px 2px 2px #000000 ;
   }
+  #restart , #Pause{
+    z-index: 3;
+    position: relative;
+  }
   .container p {
     font-size: 2em;
     color: #ffffff;
     margin-bottom: 1em;
-    border: #000000;
-    border-width: 1px;
+    z-index: 3;
+    position: relative;
+    left: 500px;
+    top: -179px;
   }
   .container span {
     font-weight: 600;
   }
+
+  .button-container {
+    display: flex;
+    padding-top: 1.5em;
+    justify-content: center;
+    gap: 5em;
+    margin-top: 1.5em;
+  }
+  
+  .button-container button {
+    background: radial-gradient(#ff5d71, #EB3349);
+    padding: 0.8em 1.5em;
+    font-size: 1em;
+    border: none;
+    outline: none;
+    border-radius: 0.5em;
+    cursor: pointer;
+  }
+  
+  .button-container button:hover {
+    box-shadow: 3px 2px 2px #000000;
+  }
+
   @media screen and (max-width: 600px) {
     body {
       font-size: 10px;
