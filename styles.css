@@ -36,7 +36,7 @@
     top: 47%;
     left: 50%;
   }
-  
+
   .color-part {
     height: 13.12em;
     width: 13.12em;
@@ -136,6 +136,10 @@
   }
   .container span {
     font-weight: 600;
+  }
+
+  .container select{
+    margin-top : 1em;
   }
 
   .button-container {
