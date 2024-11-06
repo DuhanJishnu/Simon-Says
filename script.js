@@ -9,9 +9,15 @@ const restart = document.querySelector("#restart");
 const Pause = document.querySelector("#Pause");
 const difficultySelect = document.getElementById("difficulty"); // Difficulty selector
 const leaderboard = document.getElementById("leaderboard"); // Leaderboard container
+const theme=document.getElementById("theme"); // Theme selector
+const div1=document.getElementsByClassName("color1");
+const div2=document.getElementsByClassName("color2");
+const div3=document.getElementsByClassName("color3");
+const div4=document.getElementsByClassName("color4");
+
 
 // Mapping Colors
-const colors = {
+const RGB = {
   color1: {
     current: "#068e06",
     new: "#11e711",
@@ -30,6 +36,30 @@ const colors = {
   },
 };
 
+const Neon = {
+  color1: { current: "#39ff14", new: "#4cff1a" }, // Neon Green
+  color2: { current: "#ff073a", new: "#ff4569" }, // Neon Red
+  color3: { current: "#7a00ff", new: "#933dff" }, // Neon Purple
+  color4: { current: "#fffb00", new: "#fff933" }  // Neon Yellow
+};
+
+
+const Ocean = {
+  color1: { current: "#1b3a5f", new: "#285680" }, // Deep Sea Blue
+  color2: { current: "#017374", new: "#03a8a1" }, // Teal
+  color3: { current: "#4c9dbd", new: "#63b9d6" }, // Light Ocean Blue
+  color4: { current: "#80d6ff", new: "#a2e5ff" }  // Light Sky Blue
+};
+
+const Earthy = {
+  color1: { current: "#795548", new: "#9e7c63" }, // Earth Brown
+  color2: { current: "#8d6e63", new: "#ab8f7a" }, // Clay
+  color3: { current: "#5d4037", new: "#784d3a" }, // Rich Soil Brown
+  color4: { current: "#a1887f", new: "#c6b1a1" }  // Taupe
+};
+
+
+
 let randomColors = [];
 let pathGeneratorBool = false;
 let count, clickCount = 0;
@@ -37,7 +67,7 @@ let score = 0;
 let isPaused = false; // Track paused state
 let difficulty = "Player"; // Default difficulty
 let speedFactor = 1; // Time delay multiplier
-
+let themeValue="RGB"
 
 // Initialize leaderboard with localStorage data
 function initializeLeaderboard() {
@@ -54,6 +84,32 @@ startButton.addEventListener("click", () => {
   difficulty = difficultySelect.value; // Get selected difficulty
   setDifficulty();
   count = 0;
+  
+  // Map the theme string to the actual theme object
+  switch (theme.value) {
+    case "RGB":
+      themeValue = RGB;
+      break;
+    case "Neon":
+      themeValue = Neon;
+      break;
+    case "Ocean":
+      themeValue = Ocean;
+      break;
+    case "Earthy":
+      themeValue = Earthy;
+      break;
+    default:
+      themeValue = RGB; // Default to RGB if no match
+  }
+  
+  console.log(themeValue); // Check that themeValue is now an object
+  console.log(div1)
+// Apply background color to each element in the HTMLCollections
+Array.from(div1).forEach(element => element.style.backgroundColor = themeValue.color1.current);
+Array.from(div2).forEach(element => element.style.backgroundColor = themeValue.color2.current);
+Array.from(div3).forEach(element => element.style.backgroundColor = themeValue.color3.current);
+Array.from(div4).forEach(element => element.style.backgroundColor = themeValue.color4.current);
   clickCount = 0;
   randomColors = [];
   pathGeneratorBool = false;
@@ -69,7 +125,8 @@ startButton.addEventListener("click", () => {
 
 // Function to decide the sequence
 const pathGenerate = () => {
-  randomColors.push(generateRandomValue(colors));
+  randomColors.push(generateRandomValue(themeValue));
+  console.log(randomColors)
   count = randomColors.length;
   pathGeneratorBool = true;
   pathDecide(count);
@@ -98,10 +155,12 @@ const pathDecide = async (count) => {
     }
 
     let currentColor = document.querySelector(`.${i}`);
+    console.log(currentColor);
     await delay(500 / speedFactor);
-    currentColor.style.backgroundColor = `${colors[i]["new"]}`;
+    currentColor.style.backgroundColor = `${themeValue[i]["new"]}`; 
     await delay(600 / speedFactor);
-    currentColor.style.backgroundColor = `${colors[i]["current"]}`;
+    currentColor.style.backgroundColor = `${themeValue[i]["current"]}`; 
+
     await delay(600 / speedFactor);
   }
   pathGeneratorBool = false;
@@ -122,10 +181,13 @@ colorPart.forEach((element) => {
     }
 
     if (e.target.classList[0] == randomColors[clickCount]) {
-      e.target.style.backgroundColor = `${colors[randomColors[clickCount]]["new"]}`;
+      // Correct access of the color for the clicked element
+      e.target.style.backgroundColor = `${
+        themeValue[randomColors[clickCount]]["new"]
+      }`;
       await delay(500 / speedFactor);
 
-      e.target.style.backgroundColor = `${colors[randomColors[clickCount]]["current"]}`;
+      e.target.style.backgroundColor = `${ themeValue[randomColors[clickCount]]["current"]}`;
 
       clickCount += 1;
 
@@ -140,6 +202,7 @@ colorPart.forEach((element) => {
     }
   });
 });
+
 
 // Restart the game
 restart.addEventListener("click", () => {
