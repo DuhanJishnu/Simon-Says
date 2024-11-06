@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+
     <h1 class="name">Simon - Says . . . .</h1> 
         <div class="container">
             <p id="result" class="hide">Your Score : 0</p>
@@ -22,6 +23,16 @@
                 <option value="Player">Player</option>
                 <option value="Master">Master</option>
               </select>
+
+              <!-- Leaderboard Section -->
+      <div id="leaderboard" class="leaderboard">
+        <h3>Leaderboard</h3>
+        <p><strong>Easy:</strong> <span id="easy-score">0</span></p>
+        <p><strong>Medium:</strong> <span id="medium-score">0</span></p>
+        <p><strong>Hard:</strong> <span id="hard-score">0</span></p>
+      </div>
+    </div>
+
           </div>
           <div class="wrapper hide">
             <div class="simon ">
