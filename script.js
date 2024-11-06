@@ -74,9 +74,9 @@ function initializeLeaderboard() {
   const easyScore = localStorage.getItem("easyScore") || 0;
   const mediumScore = localStorage.getItem("mediumScore") || 0;
   const hardScore = localStorage.getItem("hardScore") || 0;
-  document.getElementById("easy-score").innerText = easyScore;
-  document.getElementById("medium-score").innerText = mediumScore;
-  document.getElementById("hard-score").innerText = hardScore;
+  document.getElementById("Noob-score").innerText = easyScore;
+  document.getElementById("Player-score").innerText = mediumScore;
+  document.getElementById("Master-score").innerText = hardScore;
 }
 
 // Function to start the game
@@ -240,7 +240,6 @@ const lose = () => {
   startButton.innerText = "Play Again";
   startButton.classList.remove("hide");
   leaderboard.classList.remove("hide");
-
   // Update leaderboard for the current difficulty
   const currentBestScore = localStorage.getItem(difficulty + "Score") || 0;
   if (score > currentBestScore) {
@@ -270,3 +269,62 @@ const setDifficulty = () => {
 
 // Initialize leaderboard
 initializeLeaderboard();
+
+// Importing Sounds
+const colorSounds = {
+  color1: new Audio("sounds/color1.mp3"),
+  color2: new Audio("sounds/color2.mp3"),
+  color3: new Audio("sounds/color3.mp3"),
+  color4: new Audio("sounds/color4.mp3"),
+};
+
+// Play sound based on color
+function playSound(color) {
+  switch (color) {
+      case "color1":
+          colorSounds.color1.play();
+          break;
+      case "color2":
+          colorSounds.color2.play();
+          break;
+      case "color3":
+          colorSounds.color3.play();
+          break;
+      case "color4":
+          colorSounds.color4.play();
+          break;
+  }
+}
+
+document.querySelector(".color1").addEventListener("click", function() {
+  playSound("color1");
+  // Add other game logic here
+});
+
+document.querySelector(".color2").addEventListener("click", function() {
+  playSound("color2");
+  // Add other game logic here
+});
+
+document.querySelector(".color3").addEventListener("click", function() {
+  playSound("color3");
+  // Add other game logic here
+});
+
+document.querySelector(".color4").addEventListener("click", function() {
+  playSound("color4");
+  // Add other game logic here
+});
+
+// You can also add sounds for the sequence when Simon shows the colors
+function playSequence(sequence) {
+  let index = 0;
+  function nextSound() {
+      if (index < sequence.length) {
+          playSound(sequence[index]);
+          index++;
+          setTimeout(nextSound, 1000); // Adjust timing between sounds
+      }
+  }
+  nextSound();
+}

@@ -13,8 +13,8 @@
     color: #000000;
     text-align: center;
     color: #ffffff;
-    padding-top: 10%;
     font-size: 5em;
+    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
   }
   .wrapper {
     background: radial-gradient(circle at bottom center, #FFC837 15px, #FF8008);
@@ -26,6 +26,14 @@
     left: 50%;
     border-radius: 7em;
   }
+  .leaderboard{
+    background: radial-gradient(circle at bottom center, #FFC837 15px, #FF8008);
+    margin-top: 10%;
+    border-radius: 5%;
+    padding: 1%;
+    box-shadow: 3px 2px 3px #000000 ;
+    text-align:center;
+  }
   .simon {
     height: 31.25em;
     width: 31.25em;
@@ -36,7 +44,7 @@
     top: 47%;
     left: 50%;
   }
-  
+
   .color-part {
     height: 13.12em;
     width: 13.12em;
@@ -99,6 +107,7 @@
   }
   .container {
     background: radial-gradient(#ff5d71, #EB3349);
+    animation : fadeIn 1s ease-in-out;
     background-repeat: no-repeat;
     position: absolute;
     top: 0;
@@ -109,6 +118,16 @@
     align-items: center;
     justify-content: center;
   }
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+    
+  }
+  
   .container button {
     background: radial-gradient(circle at bottom center, #FFC837 15px, #FF8008);
     font-size: 1.2em;
@@ -136,6 +155,16 @@
   }
   .container span {
     font-weight: 600;
+  }
+
+  .container select{
+    margin-top : 1em;
+    background: radial-gradient(circle at bottom center, #FFC837 15px, #FF8008);
+    border: none;
+    padding: 2px;
+    border-radius: 5px;
+    box-shadow: 1px 1px 2px #000000 ;
+    font-size : 1em;
   }
 
   .button-container {
