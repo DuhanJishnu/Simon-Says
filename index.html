@@ -1,53 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Simon Game</title>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Simon Game</title>
 
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap"
-      rel="stylesheet"
-    />
+        <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap"
+        rel="stylesheet"
+        />
 
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-
-    <h1 class="name">Simon - Says . . . .</h1> 
-        <div class="container">
-            <p id="result" class="hide">Your Score : 0</p>
-            <button id="start">Start Game</button>
-            <select id="difficulty">
-                <option value="">Select Difficulty</option>
-                <option value="Noob">Noob</option>
-                <option value="Player">Player</option>
-                <option value="Master">Master</option>
-              </select>
-
-              <!-- Leaderboard Section -->
-      <div id="leaderboard" class="leaderboard">
-        <h3>Leaderboard</h3>
-        <p><strong>Easy:</strong> <span id="easy-score">0</span></p>
-        <p><strong>Medium:</strong> <span id="medium-score">0</span></p>
-        <p><strong>Hard:</strong> <span id="hard-score">0</span></p>
-      </div>
-    </div>
-
-          </div>
-          <div class="wrapper hide">
-            <div class="simon ">
-              <div class="color1 color-part"></div>
-              <div class="color2 color-part"></div>
-              <div class="color3 color-part"></div>
-              <div class="color4 color-part"></div>
-              <div class="color5 color-part"></div>
-              <div id="count">00</div>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+         
+            <div class="container">
+                <h1 class="name">**Simon - Says**</h1>
+                <p id="result" class="hide">Your Score: 0</p>
+                <button id="start">Start Game</button>
+                <select id="difficulty">
+                    <option value="">Select Difficulty</option>
+                    <option value="Noob">Noob</option>
+                    <option value="Player">Player</option>
+                    <option value="Master">Master</option>
+                </select>
+                <div id="leaderboard" class="leaderboard">
+                    <h1>.. High Scores ..</h1>
+                    <hr color="#000000" size="1">
+                    <h2><strong>Easy:</strong> <span id="Noob-score">0</span></h2>
+                    <h2><strong>Medium:</strong> <span id="Player-score">0</span></h2>
+                    <h2><strong>Hard:</strong> <span id="Master-score">0</span></h2>
+                </div>
             </div>
-            <div class="button-container">
-                <button id="restart" class="hide">Restart</button>
-                <button id="Pause" class="hide">Pause</button>
+
             </div>
-          </div>
-    <script src="script.js"></script>
-  </body>
-</html>
+            <div class="wrapper hide">
+                <div class="simon ">
+                <div class="color1 color-part"></div>
+                <div class="color2 color-part"></div>
+                <div class="color3 color-part"></div>
+                <div class="color4 color-part"></div>
+                <div id="count">00</div>
+                </div>
+                <div class="button-container">
+                    <button id="restart" class="hide">Restart</button>
+                    <button id="Pause" class="hide">Pause</button>
+                </div>
+            </div>
+        <script src="script.js"></script>
+    </body>
+    </html>
