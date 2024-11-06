@@ -163,6 +163,8 @@ const lose = () => {
   result.style.left = '0px';
   container.classList.remove("hide");
   wrapper.classList.add("hide");
+  restart.classList.add("hide");
+  Pause.classList.add("hide");
   startButton.innerText = "Play Again";
   startButton.classList.remove("hide");
 };
