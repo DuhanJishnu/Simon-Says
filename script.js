@@ -1,12 +1,14 @@
-//Initial References
+// Initial References
 const countValue = document.getElementById("count");
 const colorPart = document.querySelectorAll(".color-part");
 const container = document.querySelector(".container");
 const startButton = document.querySelector("#start");
 const result = document.querySelector("#result");
 const wrapper = document.querySelector(".wrapper");
+const restart = document.querySelector("#restart");
+const Pause = document.querySelector("#Pause");
 
-//Mapping Colors By Creating Colors Object
+// Mapping Colors By Creating Colors Object
 const colors = {
   color1: {
     current: "#068e06",
@@ -30,21 +32,26 @@ let randomColors = [];
 let pathGeneratorBool = false;
 let count,
   clickCount = 0;
-  let score=0;
+  let score = 0;
+  let isPaused = false; // Track the paused state
+  let pathSequence = []; // Track the sequence during pause
 
-//Function to start game
+// Function to start the game
 startButton.addEventListener("click", () => {
   count = 0;
   clickCount = 0;
   randomColors = [];
   pathGeneratorBool = false;
+  isPaused = false; // Reset pause state
   wrapper.classList.remove("hide");
   container.classList.add("hide");
   result.classList.remove("hide");
+  restart.classList.remove("hide");
+  Pause.classList.remove("hide");
   pathGenerate();
 });
 
-//Function to decide the sequence
+// Function to decide the sequence
 const pathGenerate = () => {
   randomColors.push(generateRandomValue(colors));
   count = randomColors.length;
@@ -52,16 +59,29 @@ const pathGenerate = () => {
   pathDecide(count);
 };
 
-//Function to get a random value from object
+// Function to get a random value from the colors object
 const generateRandomValue = (obj) => {
   let arr = Object.keys(obj);
   return arr[Math.floor(Math.random() * arr.length)];
 };
 
-//Function to play the sequence
+// Function to play the sequence
 const pathDecide = async (count) => {
   countValue.innerText = count;
+
   for (let i of randomColors) {
+    if (isPaused) {
+      // Wait until the game is resumed
+      await new Promise((resolve) => {
+        const interval = setInterval(() => {
+          if (!isPaused) {
+            clearInterval(interval);
+            resolve();
+          }
+        }, 100);
+      });
+    }
+
     let currentColor = document.querySelector(`.${i}`);
     await delay(500);
     currentColor.style.backgroundColor = `${colors[i]["new"]}`;
@@ -72,38 +92,35 @@ const pathDecide = async (count) => {
   pathGeneratorBool = false;
 };
 
-//Delay for blink effect
+// Delay for blink effect
 async function delay(time) {
   return await new Promise((resolve) => {
     setTimeout(resolve, time);
   });
 }
 
-//When user click on the colors
+// When the user clicks on the colors
 colorPart.forEach((element) => {
   element.addEventListener("click", async (e) => {
-    //if user clicks the same color then next level
-    if (pathGeneratorBool) {
+    // If the path is still being generated, ignore clicks
+    if (pathGeneratorBool || isPaused) {
       return false;
     }
+    
     if (e.target.classList[0] == randomColors[clickCount]) {
-      //Color blick effect on click
-      e.target.style.backgroundColor = `${
-        colors[randomColors[clickCount]]["new"]
-      }`;
+      // Color blink effect on click
+      e.target.style.backgroundColor = `${colors[randomColors[clickCount]]["new"]}`;
       await delay(500);
 
-      e.target.style.backgroundColor = `${
-        colors[randomColors[clickCount]]["current"]
-      }`;
+      e.target.style.backgroundColor = `${colors[randomColors[clickCount]]["current"]}`;
 
-      //User click
+      // User click
       clickCount += 1;
 
-      //Next level if number of valid clicks == count
+      // Next level if the number of valid clicks equals the count
       if (clickCount == count) {
         clickCount = 0;
-        score+=10
+        score += 10;
         result.innerHTML = `<span> Your Score: </span> ${score}`;
         pathGenerate();
       }
@@ -113,11 +130,37 @@ colorPart.forEach((element) => {
   });
 });
 
-//Function when player executes wrong sequence
+// Restart the game
+restart.addEventListener("click", () => {
+  count = 0;
+  clickCount = 0;
+  randomColors = [];
+  pathGeneratorBool = false;
+  score = 0;
+  result.innerHTML = `<span> Your Score: </span> ${score}`;
+  pathGenerate();
+});
+
+// Pause/Resume the game
+Pause.addEventListener("click", () => {
+  if (isPaused) {
+    // Resume the game
+    isPaused = false;
+    Pause.innerText = "Pause";
+    pathDecide(count); // Resume the path sequence
+  } else {
+    // Pause the game
+    isPaused = true;
+    pathGeneratorBool = false; // Stop the sequence generation
+    Pause.innerText = "Resume";
+  }
+});
+
+// Function when the player executes the wrong sequence
 const lose = () => {
   result.innerHTML = `<span> Your Score: </span> ${score}`;
-  result.style.top='0px';
-  result.style.left='0px';
+  result.style.top = '0px';
+  result.style.left = '0px';
   container.classList.remove("hide");
   wrapper.classList.add("hide");
   startButton.innerText = "Play Again";
