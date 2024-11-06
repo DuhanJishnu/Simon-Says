@@ -35,7 +35,7 @@ let pathGeneratorBool = false;
 let count, clickCount = 0;
 let score = 0;
 let isPaused = false; // Track paused state
-let difficulty = "medium"; // Default difficulty
+let difficulty = "Player"; // Default difficulty
 let speedFactor = 1; // Time delay multiplier
 
 
@@ -189,15 +189,15 @@ const lose = () => {
 // Set difficulty
 const setDifficulty = () => {
   switch (difficulty) {
-    case "easy":
+    case "Noob":
       speedFactor = 0.5;
 
       break;
-    case "medium":
+    case "Player":
       speedFactor = 1;
    
       break;
-    case "hard":
+    case "Master":
       speedFactor = 3;
    
       break;
