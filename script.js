@@ -1,4 +1,6 @@
 // Initial References
+document.addEventListener("DOMContentLoaded", () => {
+
 const countValue = document.getElementById("count");
 const colorPart = document.querySelectorAll(".color-part");
 const container = document.querySelector(".container");
@@ -14,6 +16,7 @@ const div1=document.getElementsByClassName("color1");
 const div2=document.getElementsByClassName("color2");
 const div3=document.getElementsByClassName("color3");
 const div4=document.getElementsByClassName("color4");
+const name=document.getElementById("name");
 
 
 // Mapping Colors
@@ -37,26 +40,28 @@ const RGB = {
 };
 
 const Neon = {
-  color1: { current: "#39ff14", new: "#4cff1a" }, // Neon Green
-  color2: { current: "#ff073a", new: "#ff4569" }, // Neon Red
-  color3: { current: "#7a00ff", new: "#933dff" }, // Neon Purple
-  color4: { current: "#fffb00", new: "#fff933" }  // Neon Yellow
+  color1: { current: "#39ff14", new: "#00ff22" }, // Brighter Green
+  color2: { current: "#ff073a", new: "#ff3355" }, // Brighter Red
+  color3: { current: "#7a00ff", new: "#a52cff" }, // Brighter Purple
+  color4: { current: "#fffb00", new: "#ffff33" }  // Brighter Yellow
 };
+
 
 
 const Ocean = {
-  color1: { current: "#1b3a5f", new: "#285680" }, // Deep Sea Blue
-  color2: { current: "#017374", new: "#03a8a1" }, // Teal
-  color3: { current: "#4c9dbd", new: "#63b9d6" }, // Light Ocean Blue
-  color4: { current: "#80d6ff", new: "#a2e5ff" }  // Light Sky Blue
+  color1: { current: "#1b3a5f", new: "#234d70" }, // Brighter Deep Blue
+  color2: { current: "#017374", new: "#029f9c" }, // Brighter Teal
+  color3: { current: "#4c9dbd", new: "#67b1d9" }, // Brighter Light Ocean Blue
+  color4: { current: "#80d6ff", new: "#b3e7ff" }  // Brighter Sky Blue
 };
 
 const Earthy = {
-  color1: { current: "#795548", new: "#9e7c63" }, // Earth Brown
-  color2: { current: "#8d6e63", new: "#ab8f7a" }, // Clay
-  color3: { current: "#5d4037", new: "#784d3a" }, // Rich Soil Brown
-  color4: { current: "#a1887f", new: "#c6b1a1" }  // Taupe
+  color1: { current: "#795548", new: "#9c7b65" }, // Slightly Brighter Earth Brown
+  color2: { current: "#8d6e63", new: "#b28a80" }, // Brighter Clay
+  color3: { current: "#5d4037", new: "#6f514a" }, // Brighter Soil Brown
+  color4: { current: "#a1887f", new: "#c9b2a7" }  // Brighter Taupe
 };
+
 
 
 
@@ -117,6 +122,7 @@ Array.from(div4).forEach(element => element.style.backgroundColor = themeValue.c
   wrapper.classList.remove("hide");
   container.classList.add("hide");
   result.classList.remove("hide");
+  name.classList.add("hide");
   restart.classList.remove("hide");
   Pause.classList.remove("hide");
   leaderboard.classList.add("hide");
@@ -155,6 +161,7 @@ const pathDecide = async (count) => {
     }
 
     let currentColor = document.querySelector(`.${i}`);
+    playSound(i);
     console.log(currentColor);
     await delay(500 / speedFactor);
     currentColor.style.backgroundColor = `${themeValue[i]["new"]}`; 
@@ -179,6 +186,8 @@ colorPart.forEach((element) => {
     if (pathGeneratorBool || isPaused) {
       return false;
     }
+    const clickedColor = e.target.classList[0];
+    playSound(clickedColor);
 
     if (e.target.classList[0] == randomColors[clickCount]) {
       // Correct access of the color for the clicked element
@@ -271,60 +280,19 @@ const setDifficulty = () => {
 initializeLeaderboard();
 
 // Importing Sounds
-const colorSounds = {
-  color1: new Audio("sounds/color1.mp3"),
-  color2: new Audio("sounds/color2.mp3"),
-  color3: new Audio("sounds/color3.mp3"),
-  color4: new Audio("sounds/color4.mp3"),
-};
 
-// Play sound based on color
-function playSound(color) {
-  switch (color) {
-      case "color1":
-          colorSounds.color1.play();
-          break;
-      case "color2":
-          colorSounds.color2.play();
-          break;
-      case "color3":
-          colorSounds.color3.play();
-          break;
-      case "color4":
-          colorSounds.color4.play();
-          break;
+  // Sounds
+  const colorSounds = {
+    color1: new Audio("sounds/color1.mp3"),
+    color2: new Audio("sounds/color2.mp3"),
+    color3: new Audio("sounds/color3.mp3"),
+    color4: new Audio("sounds/color4.mp3"),
+  };
+
+  function playSound(color) {
+    if (colorSounds[color]) {
+      colorSounds[color].currentTime = 0;
+      colorSounds[color].play();
+    }
   }
-}
-
-document.querySelector(".color1").addEventListener("click", function() {
-  playSound("color1");
-  // Add other game logic here
 });
-
-document.querySelector(".color2").addEventListener("click", function() {
-  playSound("color2");
-  // Add other game logic here
-});
-
-document.querySelector(".color3").addEventListener("click", function() {
-  playSound("color3");
-  // Add other game logic here
-});
-
-document.querySelector(".color4").addEventListener("click", function() {
-  playSound("color4");
-  // Add other game logic here
-});
-
-// You can also add sounds for the sequence when Simon shows the colors
-function playSequence(sequence) {
-  let index = 0;
-  function nextSound() {
-      if (index < sequence.length) {
-          playSound(sequence[index]);
-          index++;
-          setTimeout(nextSound, 1000); // Adjust timing between sounds
-      }
-  }
-  nextSound();
-}
