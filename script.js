@@ -7,6 +7,7 @@ const result = document.querySelector("#result");
 const wrapper = document.querySelector(".wrapper");
 const restart = document.querySelector("#restart");
 const Pause = document.querySelector("#Pause");
+const difficultySelect = document.getElementById("difficulty"); // New difficulty selector
 
 // Mapping Colors By Creating Colors Object
 const colors = {
@@ -30,19 +31,23 @@ const colors = {
 
 let randomColors = [];
 let pathGeneratorBool = false;
-let count,
-  clickCount = 0;
-  let score = 0;
-  let isPaused = false; // Track the paused state
-  let pathSequence = []; // Track the sequence during pause
+let count, clickCount = 0;
+let score = 0;
+let isPaused = false; // Track the paused state
+let pathSequence = []; // Track the sequence during pause
+let difficulty = "Player"; // Default difficulty
+let speedFactor = 1; // Time delay multiplier based on difficulty
 
 // Function to start the game
 startButton.addEventListener("click", () => {
+  difficulty = difficultySelect.value; // Get selected difficulty
+  setDifficulty();
   count = 0;
   clickCount = 0;
   randomColors = [];
   pathGeneratorBool = false;
   isPaused = false; // Reset pause state
+  startButton.classList.add("hide")
   wrapper.classList.remove("hide");
   container.classList.add("hide");
   result.classList.remove("hide");
@@ -83,11 +88,11 @@ const pathDecide = async (count) => {
     }
 
     let currentColor = document.querySelector(`.${i}`);
-    await delay(500);
+    await delay(500 / speedFactor); // Adjust speed based on difficulty
     currentColor.style.backgroundColor = `${colors[i]["new"]}`;
-    await delay(600);
+    await delay(600 / speedFactor); // Adjust speed based on difficulty
     currentColor.style.backgroundColor = `${colors[i]["current"]}`;
-    await delay(600);
+    await delay(600 / speedFactor); // Adjust speed based on difficulty
   }
   pathGeneratorBool = false;
 };
@@ -110,7 +115,7 @@ colorPart.forEach((element) => {
     if (e.target.classList[0] == randomColors[clickCount]) {
       // Color blink effect on click
       e.target.style.backgroundColor = `${colors[randomColors[clickCount]]["new"]}`;
-      await delay(500);
+      await delay(500 / speedFactor);
 
       e.target.style.backgroundColor = `${colors[randomColors[clickCount]]["current"]}`;
 
@@ -168,3 +173,19 @@ const lose = () => {
   startButton.innerText = "Play Again";
   startButton.classList.remove("hide");
 };
+
+// Set difficulty parameters (speed and sequence length)
+const setDifficulty = () => {
+  switch (difficulty) {
+    case "Noob":
+      speedFactor = 0.5; // Slow down the sequence
+      break;
+    case "Player":
+      speedFactor = 1; // Normal speed
+      break;
+    case "Master":
+      speedFactor = 3; // Speed up the sequence
+      break;
+  }
+};
+
